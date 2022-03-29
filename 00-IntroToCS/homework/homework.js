@@ -3,10 +3,7 @@
 function BinarioADecimal(num) {
   // tu codigo aca
  
-
-// Utilizo la funcion "parseInt", ya que permite convertir de un lenguaje de bajo nivel a alto nivel. 
-
-  var decimal = parseInt(num, 2);
+  var decimal = parseInt(num, 2); // Utilizo la funcion "parseInt", ya que permite convertir de un lenguaje de bajo nivel a alto nivel. 
   return decimal
 
   /* OTRA MANERA:
@@ -29,7 +26,7 @@ function BinarioADecimal(num) {
 
     var factor = Math.pow(2, i);
 
-    result = result + factor  * array[i];
+    result = result + factor * array[i];
   }
     return result;   
   */
@@ -44,29 +41,13 @@ function DecimalABinario(num) {
 /*  var binary = num.toString(2);
   return binary */
 
-var binary = "";
+var binary = ""; // Tengo que pasar de un número a un string, entonces creo un string vacio.
 
 while(num > 0) {
-    binary =  num % 2 + binary;
-    num = Math.floor(num / 2); 
+    binary =  num % 2 + binary; // Agarro el num y obtengo el resto de la division por 2 y JS lo concatena al string.
+    num = Math.floor(num / 2);  // Divido el numero por 2 y repito el bucle con el resultado hasta que este numero sea CERO.
   }
   return binary;
-
-/* 
-  1. Creo un string
-  2. Implemento el bucle While, siempre que sea mayor a cero, y dividimos por 2 HASTA que de cero, porque utilizaremos los restos de la division para sumarlos
-    y así obtener el numero en binario.
-  
-Quedaría asi:
-
-var binary = "";
-
-while(num > 0) {
-    binary = binary + (num%2);
-    num = Math.floor(num/2); 
-  }
-  return binary
-  */
 }
 
 

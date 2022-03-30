@@ -15,9 +15,9 @@ Determiná que será impreso en la consola, sin ejecutar el código.
 x = 1; 
 var a = 5; 
 var b = 10;
-var c = function(a, b, c) {
+var c = function(a, b, c) { // a= 8, b=9, c=10
   var x = 10; 
-  console.log(x); // 10
+  console.log(x); // 10 Esta dentro del contexto de la function.
   console.log(a); // 5
   var f = function(a, b, c) {
     b = a;
@@ -26,15 +26,16 @@ var c = function(a, b, c) {
     var x = 5; 
   }
   f(a,b,c);
-  console.log(b); // 9
+  console.log(b); // 9 
 }
 c(8,9,10);
-console.log(b); // 9
-console.log(x); // 5
+console.log(b); // 10
+console.log(x); // 1
 ```
 
 ```javascript
-console.log(bar); // bar no esta definido
+// var bar = undefined => sube por el hoisting
+console.log(bar); // undefined
 console.log(baz); // baz no esta definido
 foo();
 function foo() { console.log('Hola!'); } // Hola!
@@ -53,13 +54,13 @@ console.log(instructor); // Franco
 ```javascript
 var instructor = "Tony";
 console.log(instructor); // Tony
-(function() {
+(function() { // Las funciones SI CREAN UN NUEVO CONTEXTO. Esta es una IIFE (Immidiatly invoked function excecution)
    if(true) {
-      var instructor = "Franco";
-      console.log(instructor); // Franco
+      var instructor = "Franco"; // Tiene Hoisting.
+      console.log(instructor); // Franco. 
    }
 })();
-console.log(instructor); // Tony
+console.log(instructor); // Tony. Ya que el contexto anterior de la funcion se destruyó. 
 ```
 ```javascript
 var instructor = "Tony";
@@ -68,9 +69,9 @@ if (true) {
     var instructor = "The Flash";
     let pm = "Reverse Flash";
     console.log(instructor); // The Flash
-    console.log(pm); // Reverse Flash
+    console.log(pm); // Reverse Flash. Al ser LET, nace y muere entre estas llaves, no afecta al contexto global.
 }
-console.log(instructor); // Tony
+console.log(instructor); // The Flash
 console.log(pm); // Franco
 ```
 ### Coerción de Datos
@@ -85,11 +86,11 @@ console.log(pm); // Franco
 "4" - 2 // 2
 "4px" - 2 // NaN
 7 / 0 // Infinito
-{}[0] // [0]
+{}[0] // [0] 
 parseInt("09") // 9
 5 && 2 // 2
 2 && 5 // 5
-5 || 0 // 0
+5 || 0 // 5
 0 || 5 // 5
 [3]+[3]-[10] // 23
 3>2>1 // false
@@ -104,9 +105,9 @@ parseInt("09") // 9
 ¿Cuál es el output o salida en consola luego de ejecutar este código? Explicar por qué:
 
 ```javascript
-function test() {                   // 
-   console.log(a);
-   console.log(foo());
+function test() {   
+   console.log(a); // Undefined. Luego se destruye el contexto.
+   console.log(foo()); // 2. 
 
    var a = 1;
    function foo() {
@@ -124,10 +125,10 @@ var snack = 'Meow Mix';
 
 function getFood(food) {
     if (food) {
-        var snack = 'Friskies'; // La variable snack sube por el Hoisting, pero NO sube el valor. Entonces retorna undefined.
-        return snack;
+        var snack = 'Friskies'; 
+        return snack; // si fuese true se ejecutaría y snack = Friskies.  
     }
-    return snack;
+    return snack; // retorna undefined. Ya que al ser falso no se ejecuta. 
 }
 
 getFood(false);
@@ -145,14 +146,14 @@ var obj = {
    prop: {
       fullname: 'Aurelio De Rosa',
       getFullname: function() {
-         return this.fullname; // va a retornar Natalia Nerea
+         return this.fullname; 
       }
    }
 };
 
-console.log(obj.prop.getFullname());
+console.log(obj.prop.getFullname()); // va a retornar Aurelio de Rosas. 
 
-var test = obj.prop.getFullname;
+var test = obj.prop.getFullname; // va a retornar Juan Pérez, porque la variable esta en el objeto global.
 
 console.log(test());
 ```
@@ -163,11 +164,11 @@ Considerando el siguiente código, ¿Cuál sería el orden en el que se muestra 
 
 ```javascript
 function printing() {
-   console.log(1);
+   console.log(1); 
    setTimeout(function() { console.log(2); }, 1000);
    setTimeout(function() { console.log(3); }, 0);
-   console.log(4);
+   console.log(4); 
 }
 
-printing();
+printing(); // 1, 4, 3, 2
 ```

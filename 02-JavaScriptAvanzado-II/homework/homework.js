@@ -7,6 +7,10 @@ function counter() {
   // ejemplo: const newCounter = counter();
   // newCounter(); // 1
   // newCounter(); // 2
+  var counter = 0;
+  return function() {
+    return counter = counter+1;
+  }
 }
 
 function cacheFunction(cb) {
@@ -21,7 +25,24 @@ function cacheFunction(cb) {
   // si la invocas de nuevo con 5, deberia retornar 25 (guardado previament en el cache)
   // Tips, usá un objeto donde cada propiedad sea un argumento, y el valor el resultado.
   // usá hasOwnProperty!
+  var cache = {} // creamos un objeto vacio donde se almacenara el resultado
+  return function (argumento) {  // retornamos una funcion que acepta un solo argumento
+    if (cache.hasOwnProperty(argumento)) { // realizamos la comprobacion: si cache TIENE un el argumento...
+      return cache[argumento]; // quiero que me retorne el valor de la posicion argumento
+    } cache[argumento] = cb(argumento) // si NO tiene este argumento, se va a buscarlo a la funcion callback que esta asignada en los test, y lo devuelva en el objeto cache.
+    return cache[argumento] // finalmente me devuelve el obj cache con la posicion de la propiedad.
+  } 
 }
+
+/* OTRA MANERA
+var cache = {}
+return function(argumento) { 
+  if (!cache.hasOwnProperty(argumento)) {
+    return cache[argumento] = cb(argumento);
+  }
+  return cache[argumento]
+}
+*/
 
 // Bind
 
@@ -38,11 +59,13 @@ var alumno = {
 function getNombre(){
   return this.nombre;
 }
- // Escribir código, sin modificar lo que ya se encuentra escrito arriba, para poder llamar al método getNombre para obtener primero el nombre del instructor y luego para obtener el nombre del alumno.
+// Escribir código, sin modificar lo que ya se encuentra escrito arriba, para poder llamar al método getNombre para obtener primero el nombre del instructor y luego para obtener el nombre del alumno.
 // Modificar los undefined por el código correspondiente en cada caso
 // Pista, tenes que bindear el this!
-let getNombreInstructor = undefined;
-let getNombreAlumno = undefined;
+let getNombreInstructor = getNombre.bind(instructor); // con el bind estamos especificando que el this se refiera a (instructor)
+// es lo mismo que hacer
+// function getNombre() {return(instructor.nombre)}
+let getNombreAlumno = getNombre.bind(alumno); // de nuevo, estamos especificando al this que se refiera a "alumno" y no a instructor.
 
 
 /*Guardar en las siguientes tres variables una función que devuelva una cadena utilizando la función "crearCadena"
@@ -61,12 +84,11 @@ function crearCadena(delimitadorIzquierda, delimitadorDerecha, cadena){
 // Modificar los undefined por el código correspondiente en cada caso
 // Pista, tenes que usar bind para "bindear" algunos parámetros de la función crearCadena.
 
-let textoAsteriscos = undefined;
+let textoAsteriscos = crearCadena.bind(this, '*', '*'); // No me interesa cambiar la direccion del This, entonces lo dejo fijo. Deveria devolver "*Hola*"
 
-let textoGuiones = undefined;
+let textoGuiones = crearCadena.bind(this, '-', '-');
 
-let textoUnderscore = undefined;
-
+let textoUnderscore = crearCadena.bind(this, '_', '_');
 
 
 // No modifiquen nada debajo de esta linea

@@ -16,7 +16,16 @@ const {
 
 var countArray = function(array) {
     // Tu código aca:
-    
+let sum = 0; // voy a tener que sumar los valores segun la consigna, entonces inicializo una variable sum en cero.
+
+for(let i = 0; i < array.length; i++) { // recorro el array.
+    if(Array.isArray(array[i])) { // si es que encuentro un array dentro del array general
+        sum += countArray(array[i]); // quiero que se ejecute la suma para cada posicion del arreglo interno.
+    } else {
+        sum += array[i];  // si es un numero y no un arreglo, quiero que lo sume.
+    }
+}
+    return sum; // finalmente retorno la suma total.
 }
 
 
@@ -24,22 +33,32 @@ var countArray = function(array) {
 // cualquier tipo de dato, determinar la cantidad de propiedades de objetos en cualquier nivel, ya sea el inicial
 // u objetos anidados
 // Ejemplo:
-// var obj = {
-//   a: {
-//     a1: 10,
-//     a2: 'Franco',
-//     a3: {f: 'r', a: 'n', c: {o: true}}
-//   },
-//   b: 2,
-//   c: [1, {a: 1}, 'Franco']
-// }
+var obj = {
+  a: {
+    a1: 10,
+    a2: 'Franco',
+    a3: {f: 'r', a: 'n', c: {o: true}}
+  },
+  b: 2,
+  c: [1, {a: 1}, 'Franco']
+}
 // countProps(obj)--> Deberia devolver 10 ya que el objeto inicial tiene 3 propiedades, pero a su vez
 // dentro de a tenemos 3 propiedades mas, luego a3 tiene otras 3 y por ultimo c tiene una extra.
 // Propiedades: a, a1, a2, a3, f, a, c, o, b, c --> 10 en total
 
 var countProps = function(obj) {
     // Tu código aca:
+    let count = 0;
 
+    for(let prop in obj)  { 
+        count++; 
+        if(typeof obj[prop] === 'object') { // se pregunta si dentro de la propiedad hay un objeto
+            if(!Array.isArray(obj[prop])) { // si no es un arreglo entra a la condicion de abajo, si es un array directamente no entra.
+                count = count + countProps(obj[prop]); // analiza las propiedades del objeto (en este caso analiza obj.a.a3.c, que como es un objeto, lo suma).
+            }
+        }
+    }
+    return count;
 }
 
 
@@ -53,9 +72,18 @@ var countProps = function(obj) {
 
 LinkedList.prototype.changeNotNumbers = function(){
     // Tu código aca:
+let count = 0;
+let current = this.head;
 
+ while(current) {
+    if(isNaN(Number(current.value))) {
+        count++;
+        current.value = `Kiricocho`;
+    }
+ current = current.next;
+    }
+    return count;
 }
-
 
 // Implementar la función mergeQueues que a partir de dos queues recibidas por parametro
 // debe devolver una nueva Queue que vaya mergeando los nodos de las anteriores.
@@ -67,7 +95,14 @@ LinkedList.prototype.changeNotNumbers = function(){
 
 var mergeQueues = function(queueOne, queueTwo) {
     // Tu código aca:
-
+    let queue = new Queue();
+    while(queueOne.size() || queueTwo.size()) { // se pregunta mientras alguno de los dos queues tenga algo sigamos avanzando.
+        let firstElement = queueOne.dequeue(); // me devuelve el valor del primer elemento del array 1.
+        let secondElement = queueTwo.dequeue(); // me devuelve el valor del primer elemento del array 2.
+        if(firstElement) queue.enqueue(firstElement); // si firstelement tiene un valor, quiero que se sume a la nueva cola.
+        if(secondElement) queue.enqueue(secondElement); // hago lo mismo que con el primer elemento. 
+    }
+    return queue; // de esta manera se va a ir sumando los elementos a la nueva cola creada anteriormente. La retornamos como pide el ejercicio.
 }
 
 
@@ -82,14 +117,19 @@ var mergeQueues = function(queueOne, queueTwo) {
 
 var closureMult = function(multiplier) {
     // Tu código aca:
-
+    return function(num) {
+        return num * multiplier;
+    }
 }
 
 // Implementar el método sum dentro del prototype de BinarySearchTree
 // que debe retornar la suma total de los valores dentro de cada nodo del arbol
-BinarySearchTree.prototype.sum = function() {
+BinarySearchTree.prototype.sum = function(value) {
     // Tu código aca:
-
+    if(!this.rigth && !this.left) return this.value;
+    if(!this.rigth && this.left) return this.value + this.left.sum();
+    if(this.rigth && !this.left) return this.value + this.right.sum();
+    if(this.rigth && !this.left) return this.value + this.right.sum() + this.left.sum();
 }
 
 module.exports = {
